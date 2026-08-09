@@ -138,9 +138,3 @@ curl http://localhost:5000/health/auth
 curl http://localhost:5000/health/products
 ```
 
-## Notes / things to change before production
-
-- Move `Jwt:Secret` out of `appsettings.json` into environment variables / a secret manager (e.g. Azure Key Vault, AWS Secrets Manager, or `dotnet user-secrets` for local dev), and use different signing keys per environment.
-- SQLite is used for zero-setup local persistence; swap `UseSqlite` for `UseSqlServer`/`UseNpgsql` in production.
-- Enable HTTPS redirection/HSTS behind a real reverse proxy or load balancer with TLS termination.
-- Add rate limiting and refresh-token rotation for a production-grade auth flow.
