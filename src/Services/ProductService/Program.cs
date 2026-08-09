@@ -43,6 +43,7 @@ builder.Services.AddSwaggerGen(options =>
             Array.Empty<string>()
         }
     });
+    options.DocumentFilter<ODataInternalSchemaCleanupFilter>();
 });
 
 builder.Services.AddHealthChecks();
