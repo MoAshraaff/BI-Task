@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ProductService.Data;
+using ProductService.Filters;
 using ProductService.OData;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ---- Services ----
-builder.Services.AddControllers()
+builder.Services.AddControllers(options => options.Filters.Add<ODataErrorSanitizationFilter>())
     .AddOData(options => options
         .Select().Filter().OrderBy().Expand().Count().SetMaxTop(100)
         .AddRouteComponents("odata", EdmModelBuilder.GetEdmModel()));
