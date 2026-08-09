@@ -61,16 +61,13 @@ public class ODataProductsDocumentationFilter : IDocumentFilter
     {
         OperationId = "ODataProducts_GetCollection",
         Tags = new List<OpenApiTag> { new() { Name = TagName } },
-        Summary = "Query products with OData ($filter, $select, $orderby, $top, $skip, $count)",
+        Summary = "Query products with OData ($filter, $select, $orderby, $top)",
         Parameters = new List<OpenApiParameter>
         {
             ODataQueryParam("$filter", "e.g. Price gt 30 and Category eq 'Accessories'"),
             ODataQueryParam("$select", "e.g. Id,Name,Price"),
             ODataQueryParam("$orderby", "e.g. Price desc"),
-            ODataQueryParam("$top", "Max number of results, e.g. 5"),
-            ODataQueryParam("$skip", "Number of results to skip, e.g. 10"),
-            ODataQueryParam("$count", "true or false — include @odata.count in the response"),
-            ODataQueryParam("$expand", "Related entities to expand (none defined on Product today)")
+            ODataQueryParam("$top", "Max number of results, e.g. 5")
         },
         Security = security,
         Responses = new OpenApiResponses
