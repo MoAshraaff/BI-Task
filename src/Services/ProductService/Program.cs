@@ -44,6 +44,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
     options.DocumentFilter<ODataInternalSchemaCleanupFilter>();
+    options.DocumentFilter<ODataProductsDocumentationFilter>();
 });
 
 builder.Services.AddHealthChecks();
