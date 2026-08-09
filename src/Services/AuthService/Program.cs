@@ -24,11 +24,14 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
+        Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter a valid JWT token. Example: Bearer eyJhbGciOi..."
+        // Type = ApiKey (rather than Http) means Swagger UI sends this value verbatim as the
+        // Authorization header, with no automatic "Bearer " prefix — so what you type here is
+        // exactly what goes on the wire. Type the full "Bearer <token>", not just the token.
+        Description = "Type the word 'Bearer' followed by a space and your JWT. Example: Bearer eyJhbGciOi..."
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
