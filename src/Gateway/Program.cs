@@ -6,6 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+// FRONTEND: lets the Angular dev server (ng serve, localhost:4200) call this gateway from the
+// browser. Isolated here on purpose - remove this block plus the frontend/ folder to fully
+// revert the frontend work.
+const string AngularDevCorsPolicy = "AngularDev";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(AngularDevCorsPolicy, policy => policy
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
 // ---- Pipeline ----
@@ -15,6 +27,7 @@ var app = builder.Build();
 app.UseCustomExceptionHandling();
 app.UseCorrelationId();
 app.UseRequestLogging();
+app.UseCors(AngularDevCorsPolicy);
 
 app.MapGet("/", () => Results.Ok(new
 {

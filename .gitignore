@@ -5,3 +5,8 @@
 **/*.db-wal
 .vs/
 *.user
+
+# Angular frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/

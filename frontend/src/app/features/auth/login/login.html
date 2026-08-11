@@ -1,0 +1,51 @@
+<div class="centered-page">
+  <div class="card auth-card">
+    <h1>Sign in</h1>
+    <p class="subtitle">Access your BITask account to manage products.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          [class.invalid]="form.controls.username.invalid && form.controls.username.touched"
+        />
+        @if (form.controls.username.invalid && form.controls.username.touched) {
+          <div class="field-error">Username is required.</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [class.invalid]="form.controls.password.invalid && form.controls.password.touched"
+        />
+        @if (form.controls.password.invalid && form.controls.password.touched) {
+          <div class="field-error">Password is required.</div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="submitting()">
+        @if (submitting()) {
+          <span class="spinner"></span>
+        }
+        Sign in
+      </button>
+    </form>
+
+    <div class="field-hint" style="margin-top: 1.25rem;">
+      Demo admin account: <strong>admin</strong> / <strong>Admin&#64;123</strong>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account? <a routerLink="/register">Create one</a>
+    </div>
+  </div>
+</div>

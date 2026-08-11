@@ -1,0 +1,30 @@
+<header class="nav-bar">
+  <div class="nav-inner">
+    <a class="brand" routerLink="/products">
+      <span class="brand-mark">BI</span>
+      <span class="brand-name">BITask</span>
+    </a>
+
+    <nav class="nav-links">
+      @if (auth.isAuthenticated()) {
+        <a routerLink="/products" routerLinkActive="active">Products</a>
+        @if (auth.isAdmin()) {
+          <a routerLink="/products/new" routerLinkActive="active">New Product</a>
+        }
+      }
+    </nav>
+
+    <div class="nav-account">
+      @if (auth.isAuthenticated()) {
+        <span class="account-name">{{ auth.username() }}</span>
+        <span class="badge" [class.badge-admin]="auth.isAdmin()" [class.badge-user]="!auth.isAdmin()">
+          {{ auth.role() }}
+        </span>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="logout()">Sign out</button>
+      } @else {
+        <a routerLink="/login" class="btn btn-secondary btn-sm">Sign in</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm">Sign up</a>
+      }
+    </div>
+  </div>
+</header>

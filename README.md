@@ -138,3 +138,27 @@ curl http://localhost:5000/health/auth
 curl http://localhost:5000/health/products
 ```
 
+## Frontend (`frontend/`)
+
+A standalone Angular 22 app (TypeScript, hand-written CSS — no Bootstrap/Tailwind) that consumes
+the backend above: login/register with Reactive Forms, a product catalog page that queries
+`GET /odata/Products` live with `$filter`/`$orderby` as you type, and an Admin-only create/edit
+form using the plain REST endpoints. A functional `HttpInterceptor` attaches the JWT to every
+request; functional route guards (`authGuard`, `adminGuard`) protect pages by login state and role.
+
+It only talks to the Gateway (`http://localhost:5000`), never to AuthService/ProductService
+directly. The only backend change made to support it is a CORS policy added to
+`src/Gateway/Program.cs` (isolated and commented — see "Removing the frontend" below).
+
+**Run it:**
+```bash
+cd frontend
+npm install
+npx ng serve --port 4200
+```
+Open `http://localhost:4200`. The three backend services (5000/5001/5002) must already be running.
+
+**Removing the frontend:** delete the `frontend/` folder and the CORS block in
+`src/Gateway/Program.cs` (marked with a `FRONTEND:` comment). Nothing else in the backend depends
+on it.
+
