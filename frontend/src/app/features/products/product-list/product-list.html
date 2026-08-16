@@ -9,6 +9,21 @@
     }
   </div>
 
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-card-label">Total products</div>
+      <div class="stat-card-value">{{ totalCount() }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Low stock</div>
+      <div class="stat-card-value" [class.stat-card-value-warning]="lowStockCount() > 0">{{ lowStockCount() }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Inventory value</div>
+      <div class="stat-card-value">{{ totalValue() | number: '1.2-2' }}</div>
+    </div>
+  </div>
+
   <form class="card card-padded filter-bar" [formGroup]="filterForm" (ngSubmit)="search()" novalidate>
     <div class="form-group filter-search">
       <label for="search">Search by name</label>

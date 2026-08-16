@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -23,6 +23,10 @@ export class ProductList implements OnInit {
   protected readonly loading = signal(false);
   protected readonly deletingId = signal<number | null>(null);
   protected readonly categories = signal<string[]>([]);
+
+  protected readonly totalCount = computed(() => this.products().length);
+  protected readonly lowStockCount = computed(() => this.products().filter((p) => p.stock < 10).length);
+  protected readonly totalValue = computed(() => this.products().reduce((sum, p) => sum + p.price * p.stock, 0));
 
   protected readonly filterForm = this.fb.nonNullable.group({
     search: [''],

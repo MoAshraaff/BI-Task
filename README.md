@@ -94,7 +94,7 @@ All calls can also go through the gateway on port **5000** (`/api/auth/*`, `/api
 docker compose up --build
 ```
 
-This builds and runs all three services (`authservice:5001`, `productservice:5002`, `gateway:5000`) on a shared Docker network, with the gateway pointed at the container hostnames.
+This builds and runs all four services (`authservice:5001`, `productservice:5002`, `gateway:5000`, `frontend:4200`) on a shared Docker network, with the gateway pointed at the container hostnames. The frontend is built with Angular and served via Nginx. Open `http://localhost:4200`.
 
 ## Sample requests
 
@@ -150,13 +150,15 @@ It only talks to the Gateway (`http://localhost:5000`), never to AuthService/Pro
 directly. The only backend change made to support it is a CORS policy added to
 `src/Gateway/Program.cs` (isolated and commented — see "Removing the frontend" below).
 
-**Run it:**
+**Run it standalone (dev mode, hot reload):**
 ```bash
 cd frontend
 npm install
 npx ng serve --port 4200
 ```
 Open `http://localhost:4200`. The three backend services (5000/5001/5002) must already be running.
+
+Or just run `docker compose up --build` from the repo root — it builds and serves the frontend too (see "Running with Docker Compose" above).
 
 **Removing the frontend:** delete the `frontend/` folder and the CORS block in
 `src/Gateway/Program.cs` (marked with a `FRONTEND:` comment). Nothing else in the backend depends

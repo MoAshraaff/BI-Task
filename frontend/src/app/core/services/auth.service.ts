@@ -28,9 +28,9 @@ export class AuthService {
     return this.session()?.token ?? null;
   }
 
-  login(request: LoginRequest): Observable<AuthResponse> {
+  login(request: LoginRequest, remember: boolean = true): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${API_BASE_URL}/api/auth/login`, request).pipe(
-      tap((response) => this.storeSession(response))
+      tap((response) => this.storeSession(response, remember))
     );
   }
 
@@ -38,28 +38,27 @@ export class AuthService {
     return this.http.post<UserResponse>(`${API_BASE_URL}/api/auth/register`, request);
   }
 
-  me(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${API_BASE_URL}/api/auth/me`);
-  }
-
   logout(): void {
     localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(STORAGE_KEY);
     this.session.set(null);
   }
 
-  private storeSession(response: AuthResponse): void {
+  private storeSession(response: AuthResponse, remember: boolean): void {
     const stored: StoredSession = {
       token: response.token,
       username: response.username,
       role: response.role,
       expiresAtUtc: response.expiresAtUtc
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+    localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(STORAGE_KEY);
+    (remember ? localStorage : sessionStorage).setItem(STORAGE_KEY, JSON.stringify(stored));
     this.session.set(stored);
   }
 
   private readStoredSession(): StoredSession | null {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY);
     if (!raw) {
       return null;
     }
@@ -68,11 +67,13 @@ export class AuthService {
       const parsed = JSON.parse(raw) as StoredSession;
       if (new Date(parsed.expiresAtUtc).getTime() <= Date.now()) {
         localStorage.removeItem(STORAGE_KEY);
+        sessionStorage.removeItem(STORAGE_KEY);
         return null;
       }
       return parsed;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem(STORAGE_KEY);
       return null;
     }
   }

@@ -21,7 +21,8 @@ export class Login {
 
   protected readonly form = this.fb.nonNullable.group({
     username: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
+    rememberMe: [true]
   });
 
   submit(): void {
@@ -30,8 +31,9 @@ export class Login {
       return;
     }
 
+    const { username, password, rememberMe } = this.form.getRawValue();
     this.submitting.set(true);
-    this.auth.login(this.form.getRawValue()).subscribe({
+    this.auth.login({ username, password }, rememberMe).subscribe({
       next: (response) => {
         this.notifications.success(`Welcome back, ${response.username}.`);
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/products';
@@ -39,5 +41,13 @@ export class Login {
       },
       error: () => this.submitting.set(false)
     });
+  }
+
+  protected socialComingSoon(provider: string): void {
+    this.notifications.info(`${provider} sign-in isn't wired up in this demo yet.`);
+  }
+
+  protected forgotPassword(): void {
+    this.notifications.info('Password reset is not available in this demo yet.');
   }
 }

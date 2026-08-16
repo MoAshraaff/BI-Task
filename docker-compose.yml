@@ -40,6 +40,18 @@ services:
     networks:
       - bitask-net
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bitask-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - gateway
+    networks:
+      - bitask-net
+
 networks:
   bitask-net:
     driver: bridge

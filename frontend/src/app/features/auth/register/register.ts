@@ -50,4 +50,8 @@ export class Register {
       error: () => this.submitting.set(false)
     });
   }
+
+  protected socialComingSoon(provider: string): void {
+    this.notifications.info(`${provider} sign-in isn't wired up in this demo yet.`);
+  }
 }
